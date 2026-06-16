@@ -141,6 +141,7 @@ Send a user message and receive a personalized AI response.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `message` | string | Yes | The user's question or message |
+| `context.currentCourse` | string | No | Set to `COAL` to switch the prompt to the COAL curriculum |
 | `context.currentTopic` | string | No | Slug of the page the user is currently on |
 | `context.recentTopics` | string[] | No | Ordered list of recently visited topic slugs |
 | `context.toolsUsed` | string[] | No | Tools the user has interacted with this session |
@@ -166,17 +167,21 @@ Send a user message and receive a personalized AI response.
 
 ---
 
-### `POST /api/ai/chat/stream` *(optional)*
+### `GET /api/ai/chat/stream` *(optional)*
 
 Same request body as above. Returns a `text/event-stream` (SSE) response that streams the reply token by token.
 
 **Frontend usage:**
 
 ```js
-const source = new EventSource('/api/ai/chat/stream', { withCredentials: true });
+const source = new EventSource(`/api/ai/chat/stream?message=${encodeURIComponent(message)}&context=${encodeURIComponent(JSON.stringify(context))}`, { withCredentials: true });
 source.onmessage = (e) => appendToken(e.data);
 source.onerror = () => source.close();
 ```
+
+### `POST /api/ai/chat/stream`
+
+The same handler also accepts `POST` requests for clients that prefer sending JSON in the body.
 
 ---
 

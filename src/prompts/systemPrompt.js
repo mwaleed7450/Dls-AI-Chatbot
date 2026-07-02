@@ -97,7 +97,7 @@ function buildDualCurriculumBlock() {
  * @returns {string} fully assembled system prompt
  */
 function buildSystemPrompt({ user, context = {} } = {}) {
-  const name = (user && user.name) || 'there';
+  const name = (user && user.name) || context.name || 'there';
 
   const {
     currentCourse,

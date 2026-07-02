@@ -17,8 +17,16 @@ const app = express();
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'http://localhost:3000',
+  'http://localhost:3001',
   'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
 ].filter(Boolean);
+
+const isDev = (process.env.NODE_ENV || 'development') !== 'production';
+
+function isLocalDevOrigin(origin) {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+}
 
 app.use(express.json({ limit: '100kb' }));
 app.use(cookieParser());
@@ -26,10 +34,16 @@ app.use(cookieParser());
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
         return callback(null, true);
       }
-      return callback(new Error(`CORS blocked for origin: ${origin}`));
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      if (isDev && isLocalDevOrigin(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, false);
     },
     credentials: true,
   })

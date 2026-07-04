@@ -347,7 +347,21 @@ Pinecone's free tier also has its own request rate limits — `scripts/ingest.js
 - The bundled local UI is meant for quick testing and onboarding, while the API remains the integration surface for Boolforge or any other frontend.
 
 ---
+## Feedback Mechanism
 
+The chatbot now includes a feedback loop for evaluating answer quality:
+
+- **Feedback model** (`src/models/Feedback.js`) — stores each rating in MongoDB, including the question, answer, retrieved chunks, rating (`up`/`down`), an optional comment, and topic.
+- **Feedback routes** (`src/routes/feedback.js`):
+  - `POST /api/feedback` — submit a thumbs up/down rating for an answer.
+  - `PATCH /api/feedback/:id/comment` — attach an optional comment to an existing thumbs-down entry.
+  - `GET /api/feedback/stats` — aggregated up/down counts and down-rate per topic.
+  - `GET /api/feedback/negatives` — raw thumbs-down entries, useful as an eval set for improving curriculum content.
+- **Frontend widget** (`public/feedback-widget.js`) — renders a thumbs up/down control under each bot answer in the local UI, with an optional comment box shown after a thumbs-down.
+
+This gives visibility into answer quality over time and highlights curriculum areas that may need better source material.
+
+---
 ## License
 
 Proprietary License. All rights reserved.

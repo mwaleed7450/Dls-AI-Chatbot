@@ -260,6 +260,112 @@
       text-align: right;
       padding: 0 20px 6px;
     }
+    /* ── Feedback widget ── */
+    .feedback-widget {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .feedback-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feedback-comment-box {
+      margin-top: 10px;
+    }
+
+    .feedback-comment-input {
+      width: 100%;
+      resize: none;
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .feedback-comment-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .feedback-comment-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .feedback-comment-submit,
+    .feedback-comment-skip {
+      font-size: 12.5px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    .feedback-comment-submit {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .feedback-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .feedback-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .feedback-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .feedback-btn:hover { border-color: var(--accent); }
+    .feedback-btn:hover svg { stroke: var(--accent); }
+
+    .feedback-btn.selected.feedback-up {
+      background: #12241D;
+      border-color: #34C289;
+    }
+    .feedback-btn.selected.feedback-up svg { stroke: #34C289; }
+
+    .feedback-btn.selected.feedback-down {
+      background: #2A1A1A;
+      border-color: #E5604B;
+    }
+    .feedback-btn.selected.feedback-down svg { stroke: #E5604B; }
+
+    .feedback-btn:disabled { cursor: default; opacity: 0.7; }
+
+    .feedback-status {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -486,6 +592,7 @@
         <div class="bubble">${escHtml(text)}</div>
       </div>`);
     scrollToBottom();
+    attachFeedbackWidget(document.getElementById(id), { question: 'test', answer: text });
   }
 
   function removeMessage(id) {
@@ -521,6 +628,6 @@
 
   sendBtn.addEventListener('click', sendMessage);
 </script>
-<script src="/feedback-widget.js"></script>
+<script src="/public/feedback-widget.js"></script>
 </body>
 </html>
